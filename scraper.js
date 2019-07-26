@@ -58,7 +58,7 @@ function tick() {
 
     const status = await scrapeStatus(lotId);
     await persist(status);
-    console.log(status);
+    console.log("recorded status", status);
 
   })();
 }
