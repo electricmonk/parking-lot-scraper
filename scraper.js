@@ -1,7 +1,6 @@
 const axios = require("axios")
 const cheerio = require('cheerio');
 const mongoose = require('mongoose');
-const express = require('express')
 
 function connect() {
     return new Promise((resolve, reject) => {
@@ -53,25 +52,20 @@ async function scrapeStatus(lotId) {
     return new Occupancy({lotId, occupancy, date: new Date()});
 }
 
-function tick() {
-    (async function () {
-        const lotId = 122;
-
-        const status = await scrapeStatus(lotId);
-        await persist(status);
-        console.log("recorded status", status);
-
-    })();
-}
 
 (async function main() {
 
     await connect();
+    console.log("connected to db");
 
-    setInterval(tick, 1000 * 60 * 5);
+    console.log("scraping the lot status");
 
-    const app = express();
+    const status = await scrapeStatus(122);
+    console.log("scraped status", status);
 
-    app.listen(process.env.PORT);
+    await persist(status);
+    console.log("recorded status", status);
+
+    mongoose.connection.close();
 
 })();
