@@ -47,24 +47,32 @@ async function scrapeStatus(lotId) {
                 return 90;
             case "panui.png":
                 return 0;
+            default:
+                return -1;
         }
     })(src);
     return new Occupancy({lotId, occupancy, date: new Date()});
 }
 
 
+async function scrapeAndLog(lotId) {
+    const status = await scrapeStatus(lotId);
+    console.log("scraped status", status);
+
+    await persist(status);
+    console.log("recorded status", status);
+}
+
 (async function main() {
 
     await connect();
     console.log("connected to db");
 
-    console.log("scraping the lot status");
+    console.log("scraping lot statuses");
 
-    const status = await scrapeStatus(122);
-    console.log("scraped status", status);
-
-    await persist(status);
-    console.log("recorded status", status);
+    await scrapeAndLog(3);
+    await scrapeAndLog(122);
+    await scrapeAndLog(123);
 
     mongoose.connection.close();
 
