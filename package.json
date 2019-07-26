@@ -2,6 +2,9 @@
   "name": "parking-lot-scraper",
   "version": "0.0.1",
   "main": "scraper.js",
+  "scripts": {
+    "start": "node scraper.js"
+  },
   "dependencies": {
     "axios": "^0.19.0",
     "cheerio": "^1.0.0-rc.3",
